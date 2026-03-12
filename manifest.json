@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "UgPhone Quick Tool",
+  "version": "1.0",
+  "description": "Quick set localStorage cho UgPhone",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "UgPhone Tool"
+  },
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["*://*.ugphone.com/*"]
+}
