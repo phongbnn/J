@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UgPhone Tool</title>
+  <style>
+    body { width:320px; padding:15px; background:#111; color:#0f0; font-family:Arial; text-align:center; }
+    textarea { width:100%; height:180px; background:#222; color:#0f0; border:1px solid #0f0; }
+    button { width:100%; padding:12px; background:#0f0; color:#000; border:none; margin-top:15px; cursor:pointer; }
+    #status { margin-top:15px; color:#ffcc00; }
+  </style>
+</head>
+<body>
+  <h3>UgPhone Quick Tool</h3>
+  <textarea id="json" placeholder='Dán JSON localStorage UgPhone...'></textarea>
+  <button onclick="setStorage()">Set & Reload</button>
+  <div id="status">Sẵn sàng...</div>
+
+  <script>
+    function setStorage() {
+      const json = document.getElementById('json').value.trim();
+      const status = document.getElementById('status');
+      if (!json) return status.textContent = 'Dán JSON đi!';
+      try {
+        const data = JSON.parse(json);
+        chrome.tabs.query({active:true, currentWindow:true}, tabs => {
+          chrome.scripting.executeScript({
+            target: {tabId: tabs[0].id},
+            func: (d) => {
+              localStorage.clear();
+              for (let k in d) localStorage.setItem(k, d[k]);
+              location.reload();
+            },
+            args: [data]
+          });
+          status.textContent = 'Set xong! Reload UgPhone...';
+        });
+      } catch(e) { status.textContent = 'Lỗi: ' + e.message; }
+    }
+  </script>
+</body>
+</html>
